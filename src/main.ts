@@ -160,10 +160,13 @@ async function run() {
 
         const extractFn = getExtractFn(asset.name);
 
-        const url = asset.browser_download_url
+        const url = asset.url;
+        const authHeader = `Bearer ${token}`;
 
         core.info(`Downloading ${project} from ${url}`)
-        const binPath = await tc.downloadTool(url);
+        const binPath = await tc.downloadTool(url,'',authHeader,{
+            accept: "application/octet-stream"
+        });
         await extractFn(binPath, dest);
 
         if (cacheEnabled && cacheKey !== undefined) {
